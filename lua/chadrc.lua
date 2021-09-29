@@ -218,7 +218,7 @@ M.plugins = {
    lspconfig = {
       -- servers = {"html", "cssls"}
       -- servers = {"pyright-langserver", "docker-langserver", "dockerls", "graphql-lsp"},
-      servers = {"pyright"},
+      servers = { "pyright" },
    },
 }
 
