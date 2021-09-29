@@ -8,7 +8,7 @@ M.ui = {
    italic_comments = false,
 
    -- theme to be used, to see all available themes, open the theme switcher by <leader> + th
-   theme = "onedark",
+   theme = "mountain",
 
    -- theme toggler, toggle between two themes, see theme_toggleer mappings
    theme_toggler = {
@@ -87,7 +87,7 @@ M.plugin_status = {
    lspsignature = true, -- lsp enhancements
    neoformat = true, -- universal formatter
    neoscroll = true, -- smooth scroll
-   telescope_media = false, -- see media files in telescope picker
+   telescope_media = true, -- see media files in telescope picker
    truezen = false, -- no distraction mode for nvim
    vim_fugitive = false, -- git in nvim
    vim_matchup = true, -- % magic, match it but improved
@@ -217,7 +217,8 @@ M.custom.mappings = {
 M.plugins = {
    lspconfig = {
       -- servers = {"html", "cssls"}
-      servers = {},
+      -- servers = {"pyright-langserver", "docker-langserver", "dockerls", "graphql-lsp"},
+      servers = {"pyright"},
    },
 }
 
