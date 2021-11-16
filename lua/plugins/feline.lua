@@ -1,193 +1,254 @@
+if not pcall(require, "feline") then
+  return
+end
 
--- Statusline configuration file
------------------------------------------------------------
-
--- Plugin: feline.nvim
--- https://github.com/famiu/feline.nvim
-
--- For the configuration see the Usage section:
---- https://github.com/famiu/feline.nvim/blob/master/USAGE.md
-
--- Thanks to ibhagwan for the example to follow:
---- https://github.com/ibhagwan/nvim-lua
-
-
-local colors = require 'colors'
-
--- monokai colors
-local vi_mode_colors = {
-  NORMAL = colors.cyan,
-  INSERT = colors.green,
-  VISUAL = colors.yellow,
-  OP = colors.cyan,
-  BLOCK = colors.cyan,
-  REPLACE = colors.red,
-  ['V-REPLACE'] = colors.red,
-  ENTER = colors.orange,
-  MORE = colors.orange,
-  SELECT = colors.yellow,
-  COMMAND = colors.pink,
-  SHELL = colors.pink,
-  TERM = colors.pink,
-  NONE = colors.purple
+local colors = {
+    bg = '#282c34',
+    fg = '#abb2bf',
+    yellow = '#e0af68',
+    cyan = '#56b6c2',
+    darkblue = '#081633',
+    green = '#98c379',
+    orange = '#d19a66',
+    violet = '#a9a1e1',
+    magenta = '#c678dd',
+    blue = '#61afef',
+    red = '#e86671'
 }
+
+local vi_mode_colors = {
+    NORMAL = colors.green,
+    INSERT = colors.red,
+    VISUAL = colors.magenta,
+    OP = colors.green,
+    BLOCK = colors.blue,
+    REPLACE = colors.violet,
+    ['V-REPLACE'] = colors.violet,
+    ENTER = colors.cyan,
+    MORE = colors.cyan,
+    SELECT = colors.orange,
+    COMMAND = colors.green,
+    SHELL = colors.green,
+    TERM = colors.green,
+    NONE = colors.yellow
+}
+
+local function file_osinfo()
+    local os = vim.bo.fileformat:upper()
+    local icon
+    if os == 'UNIX' then
+        icon = ' '
+    elseif os == 'MAC' then
+        icon = ' '
+    else
+        icon = ' '
+    end
+    return icon .. os
+end
 
 local lsp = require 'feline.providers.lsp'
 local vi_mode_utils = require 'feline.providers.vi_mode'
 
 local lsp_get_diag = function(str)
-  local count = vim.lsp,diagnostic.get_count(0, str)
+  local count = vim.lsp.diagnostic.get_count(0, str)
   return (count > 0) and ' '..count..' ' or ''
 end
 
--- My components
+-- LuaFormatter off
+
 local comps = {
-  -- vi_mode -> NORMAL, INSERT..
-  vi_mode = {
-    left = {
-      provider = function()
-        local label = ' '..vi_mode_utils.get_vim_mode()..' '
-        return label
-      end,
-      hl = function()
-        local set_color = {
-          name = vi_mode_utils.get_mode_highlight_name(),
-          fg = colors.bg,
-          bg = vi_mode_utils.get_mode_color(),
-          style = 'bold'
+    vi_mode = {
+        left = {
+            provider = function()
+              return '  ' .. vi_mode_utils.get_vim_mode()
+            end,
+            hl = function()
+                local val = {
+                    name = vi_mode_utils.get_mode_highlight_name(),
+                    fg = vi_mode_utils.get_mode_color(),
+                    -- fg = colors.bg
+                }
+                return val
+            end,
+            right_sep = ' '
+        },
+        right = {
+            -- provider = '▊',
+            provider = '' ,
+            hl = function()
+                local val = {
+                    name = vi_mode_utils.get_mode_highlight_name(),
+                    fg = vi_mode_utils.get_mode_color()
+                }
+                return val
+            end,
+            left_sep = ' ',
+            right_sep = ' '
         }
-        return set_color
-      end,
-      left_sep = ' ',
-      right_sep = ' '
-    }
-  },
-  -- parse file information
-  file = {
-    -- file name
-    info = {
-      provider = {
-        name = 'file_info',
-        opts = {
-          type = 'relative',
-          file_modified_icon = ''
+    },
+    file = {
+        info = {
+            provider = {
+              name = 'file_info',
+              opts = {
+                type = 'relative-short',
+                file_readonly_icon = '  ',
+                -- file_readonly_icon = '  ',
+                -- file_readonly_icon = '  ',
+                -- file_readonly_icon = '  ',
+                -- file_modified_icon = '',
+                file_modified_icon = '',
+                -- file_modified_icon = 'ﱐ',
+                -- file_modified_icon = '',
+                -- file_modified_icon = '',
+                -- file_modified_icon = '',
+              }
+            },
+            hl = {
+                fg = colors.blue,
+                style = 'bold'
+            }
+        },
+        encoding = {
+            provider = 'file_encoding',
+            left_sep = ' ',
+            hl = {
+                fg = colors.violet,
+                style = 'bold'
+            }
+        },
+        type = {
+            provider = 'file_type'
+        },
+        os = {
+            provider = file_osinfo,
+            left_sep = ' ',
+            hl = {
+                fg = colors.violet,
+                style = 'bold'
+            }
+        },
+        position = {
+            provider = 'position',
+            left_sep = ' ',
+            hl = {
+                fg = colors.cyan,
+                -- style = 'bold'
+            }
+        },
+    },
+    left_end = {
+        provider = function() return '' end,
+        hl = {
+            fg = colors.bg,
+            bg = colors.blue,
         }
-      },
-      hl = { fg = colors.cyan },
-      icon = '',
     },
-    -- file type
-    type = {
-      provider = { name = 'file_type' },
-    },
-    -- operating system
-    os = {
-      provider = function()
-        local os = vim.bo.fileformat:lower()
-        local icon
-        if os == 'unix' then
-          icon = '  '
-        elseif os == 'mac' then
-          icon = '  '
-        else
-          icon = '  '
-        end
-        return icon .. os
-      end,
-      hl = { fg = colors.fg },
-      left_sep = ' ',
-      right_sep = ' '
-    },
-    -- cursor position in %
     line_percentage = {
-      provider = { name = 'line_percentage' },
-      hl = { fg = colors.pink },
-      left_sep = ' ',
-      right_sep = ' '
+        provider = 'line_percentage',
+        left_sep = ' ',
+        hl = {
+            style = 'bold'
+        }
     },
-    -- raw-column
-    position = {
-      provider = {name = 'position'},
-      hl = {
-        fg = colors.cyan,
-        style = 'bold'
-      },
-      right_sep = ' ',
-    },
-    -- simple scrollbar (inactive)
     scroll_bar = {
-      provider = { name = 'scroll_bar' },
-      hl = { fg = colors.fg },
-      left_sep = ' ',
-      right_sep = ' '
+        provider = 'scroll_bar',
+        left_sep = ' ',
+        hl = {
+            fg = colors.blue,
+            style = 'bold'
+        }
     },
-  },
-  -- LSP info
-  diagnos = {
-    err = {
-      provider = 'diagnostic_errors',
-      icon = '⚠ ',
-      hl = { fg = colors.red },
-      left_sep = '  ',
+    diagnos = {
+        err = {
+            -- provider = 'diagnostic_errors',
+            provider = function()
+                return '' .. lsp_get_diag("Error")
+            end,
+            -- left_sep = ' ',
+            enabled = function() return lsp.diagnostics_exist('Error') end,
+            hl = {
+                fg = colors.red
+            }
+        },
+        warn = {
+            -- provider = 'diagnostic_warnings',
+            provider = function()
+                return '' ..  lsp_get_diag("Warning")
+            end,
+            -- left_sep = ' ',
+            enabled = function() return lsp.diagnostics_exist('Warning') end,
+            hl = {
+                fg = colors.yellow
+            }
+        },
+        info = {
+            -- provider = 'diagnostic_info',
+            provider = function()
+                return '' .. lsp_get_diag("Information")
+            end,
+            -- left_sep = ' ',
+            enabled = function() return lsp.diagnostics_exist('Information') end,
+            hl = {
+                fg = colors.blue
+            }
+        },
+        hint = {
+            -- provider = 'diagnostic_hints',
+            provider = function()
+                return '' .. lsp_get_diag("Hint")
+            end,
+            -- left_sep = ' ',
+            enabled = function() return lsp.diagnostics_exist('Hint') end,
+            hl = {
+                fg = colors.cyan
+            }
+        },
     },
-    warn = {
-      provider = 'diagnostic_warnings',
-      icon = ' ',
-      hl = { fg = colors.yellow },
-      left_sep = ' ',
+    lsp = {
+        name = {
+            provider = 'lsp_client_names',
+            -- left_sep = ' ',
+            right_sep = ' ',
+            -- icon = '  ',
+            icon = '慎',
+            hl = {
+                fg = colors.yellow
+            }
+        }
     },
-    info = {
-      provider = 'diagnostic_info',
-      icon = ' ',
-      hl = { fg = colors.green },
-      left_sep = ' ',
-    },
-    hint = {
-      provider = 'diagnostic_hints',
-      icon = ' ',
-      hl = { fg = colors.cyan },
-      left_sep = ' ',
-    },
-  },
-  lsp = {
-    name = {
-      provider = 'lsp_client_names',
-      icon = '  ',
-      hl = { fg = colors.pink },
-      left_sep = '  ',
+    git = {
+        branch = {
+            provider = 'git_branch',
+            icon = ' ',
+            -- icon = ' ',
+            left_sep = ' ',
+            hl = {
+                fg = colors.violet,
+                style = 'bold'
+            },
+        },
+        add = {
+            provider = 'git_diff_added',
+            hl = {
+                fg = colors.green
+            }
+        },
+        change = {
+            provider = 'git_diff_changed',
+            hl = {
+                fg = colors.orange
+            }
+        },
+        remove = {
+            provider = 'git_diff_removed',
+            hl = {
+                fg = colors.red
+            }
+        }
     }
-  },
-  -- git info
-  git = {
-    branch = {
-      provider = 'git_branch',
-      icon = ' ',
-      hl = { fg = colors.pink },
-      left_sep = '  ',
-    },
-    add = {
-      provider = 'git_diff_added',
-      icon = '  ',
-      hl = { fg = colors.green },
-      left_sep = ' ',
-    },
-    change = {
-      provider = 'git_diff_changed',
-      icon = '  ',
-      hl = { fg = colors.orange },
-      left_sep = ' ',
-    },
-    remove = {
-      provider = 'git_diff_removed',
-      icon = '  ',
-      hl = { fg = colors.red },
-      left_sep = ' ',
-    }
-  }
 }
 
--- Get active/inactive components
---- see: https://github.com/famiu/feline.nvim/blob/master/USAGE.md#components
 local components = {
   active = {},
   inactive = {},
@@ -195,43 +256,60 @@ local components = {
 
 table.insert(components.active, {})
 table.insert(components.active, {})
+table.insert(components.active, {})
+table.insert(components.inactive, {})
 table.insert(components.inactive, {})
 table.insert(components.inactive, {})
 
--- Right section
 table.insert(components.active[1], comps.vi_mode.left)
 table.insert(components.active[1], comps.file.info)
 table.insert(components.active[1], comps.git.branch)
 table.insert(components.active[1], comps.git.add)
 table.insert(components.active[1], comps.git.change)
 table.insert(components.active[1], comps.git.remove)
+table.insert(components.inactive[1], comps.vi_mode.left)
 table.insert(components.inactive[1], comps.file.info)
+table.insert(components.active[3], comps.diagnos.err)
+table.insert(components.active[3], comps.diagnos.warn)
+table.insert(components.active[3], comps.diagnos.hint)
+table.insert(components.active[3], comps.diagnos.info)
+table.insert(components.active[3], comps.lsp.name)
+table.insert(components.active[3], comps.file.os)
+table.insert(components.active[3], comps.file.position)
+table.insert(components.active[3], comps.line_percentage)
+table.insert(components.active[3], comps.scroll_bar)
+table.insert(components.active[3], comps.vi_mode.right)
 
--- Left Section
-table.insert(components.active[2], comps.diagnos.err)
-table.insert(components.active[2], comps.diagnos.warn)
-table.insert(components.active[2], comps.diagnos.hint)
-table.insert(components.active[2], comps.diagnos.info)
-table.insert(components.active[2], comps.lsp.name)
-table.insert(components.active[2], comps.file.os)
-table.insert(components.active[2], comps.file.line_percentage)
-table.insert(components.active[2], comps.file.position)
 
--- call feline
-require('feline').setup {
-  colors = {
-    bg = colors.bg,
-    fg = colors.fg
-  },
-  components = components,
-  vi_mode_colors = vi_mode_colors,
-  force_inactive = {
-    filetypes = {
-      'NvimTree',
-      'vista',
-      'term'
-    },
-    buftypes = {},
-    bufnames = {},
-  },
+-- TreeSitter
+-- local ts_utils = require("nvim-treesitter.ts_utils")
+-- local ts_parsers = require("nvim-treesitter.parsers")
+-- local ts_queries = require("nvim-treesitter.query")
+--[[ table.insert(components.active[2], {
+  provider = function()
+    local node = require("nvim-treesitter.ts_utils").get_node_at_cursor()
+    return ("%d:%s [%d, %d] - [%d, %d]")
+      :format(node:symbol(), node:type(), node:range())
+  end,
+  enabled = function()
+    local ok, ts_parsers = pcall(require, "nvim-treesitter.parsers")
+    return ok and ts_parsers.has_parser()
+  end
+}) ]]
+
+-- require'feline'.setup {}
+require'feline'.setup {
+    colors = { bg = colors.bg, fg = colors.fg },
+    components = components,
+    vi_mode_colors = vi_mode_colors,
+    force_inactive = {
+        filetypes = {
+            'packer',
+            'NvimTree',
+            'fugitive',
+            'fugitiveblame'
+        },
+        buftypes = {'terminal'},
+        bufnames = {}
+    }
 }
