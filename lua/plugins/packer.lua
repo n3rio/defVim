@@ -40,7 +40,19 @@ return packer.startup(function()
   -- colorschemes
   use 'tanvirtin/monokai.nvim'
 
-  use { 'rose-pine/neovim', as = 'rose-pine' }
+  --[[ use { 'rose-pine/neovim',
+        as = 'rose-pine',
+        config = function()
+          -- Options (see available options below)
+          vim.g.rose_pine_variant = 'base'
+          -- Load colorscheme after options
+          vim.cmd('colorscheme rose-pine')
+        end
+    } ]]
+
+  -- use 'projekt0n/github-nvim-theme'
+
+  use 'shaunsingh/nord.nvim'
 
   -- LSP
   use 'neovim/nvim-lspconfig'
