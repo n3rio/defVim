@@ -9,38 +9,37 @@
 --- neovim-lua/README.md
 --- https://github.com/brainfucksec/neovim-lua#readme
 
-
 local cmd = vim.cmd
 cmd [[packadd packer.nvim]]
 
-local packer = require 'packer'
+local packer = require "packer"
 
 -- Add packages
 return packer.startup(function()
-  use 'wbthomason/packer.nvim' -- packer can manage itself
+   use "wbthomason/packer.nvim" -- packer can manage itself
 
-  -- file explorer
-  use 'kyazdani42/nvim-tree.lua'
+   -- file explorer
+   use "kyazdani42/nvim-tree.lua"
 
-  -- indent line
-  use 'lukas-reineke/indent-blankline.nvim'
+   -- indent line
+   use "lukas-reineke/indent-blankline.nvim"
 
-  -- autopair
-  use 'windwp/nvim-autopairs'
+   -- autopair
+   use "windwp/nvim-autopairs"
 
-  -- icons
-  use 'kyazdani42/nvim-web-devicons'
+   -- icons
+   use "kyazdani42/nvim-web-devicons"
 
-  -- tagviewer
-  use 'liuchengxu/vista.vim'
+   -- tagviewer
+   use "liuchengxu/vista.vim"
 
-  -- treesitter interface
-  use 'nvim-treesitter/nvim-treesitter'
+   -- treesitter interface
+   use "nvim-treesitter/nvim-treesitter"
 
-  -- colorschemes
-  use 'tanvirtin/monokai.nvim'
+   -- colorschemes
+   use "tanvirtin/monokai.nvim"
 
-  --[[ use { 'rose-pine/neovim',
+   --[[ use { 'rose-pine/neovim',
         as = 'rose-pine',
         config = function()
           -- Options (see available options below)
@@ -50,46 +49,46 @@ return packer.startup(function()
         end
     } ]]
 
-  -- use 'projekt0n/github-nvim-theme'
+   -- use 'projekt0n/github-nvim-theme'
 
-  use 'shaunsingh/nord.nvim'
+   use "shaunsingh/nord.nvim"
 
-  -- LSP
-  use 'neovim/nvim-lspconfig'
+   -- LSP
+   use "neovim/nvim-lspconfig"
 
-  -- autocomplete
-  use {
-    'hrsh7th/nvim-cmp',
-    requires = {
-      'L3MON4D3/LuaSnip',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-buffer',
-      'saadparwaiz1/cmp_luasnip',
-    },
-  }
+   -- autocomplete
+   use {
+      "hrsh7th/nvim-cmp",
+      requires = {
+         "L3MON4D3/LuaSnip",
+         "hrsh7th/cmp-nvim-lsp",
+         "hrsh7th/cmp-path",
+         "hrsh7th/cmp-buffer",
+         "saadparwaiz1/cmp_luasnip",
+      },
+   }
 
-  -- statusline
-  use {
-    'famiu/feline.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons' },
-  }
+   -- statusline
+   use {
+      "famiu/feline.nvim",
+      requires = { "kyazdani42/nvim-web-devicons" },
+   }
 
-  -- git labels
-  use {
-    'lewis6991/gitsigns.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('gitsigns').setup()
-    end,
-  }
+   -- git labels
+   use {
+      "lewis6991/gitsigns.nvim",
+      requires = { "nvim-lua/plenary.nvim" },
+      config = function()
+         require("gitsigns").setup()
+      end,
+   }
 
-  use { 'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons' }
+   use { "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" }
 
-  use 'b3nj5m1n/kommentary'
+   use "b3nj5m1n/kommentary"
 
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
-  }
+   use {
+      "nvim-telescope/telescope.nvim",
+      requires = { { "nvim-lua/plenary.nvim" } },
+   }
 end)

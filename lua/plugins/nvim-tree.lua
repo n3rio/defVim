@@ -21,25 +21,25 @@ g.nvim_tree_git_hl = 1
 g.nvim_tree_highlight_opened_files = 1
 g.nvim_tree_disable_window_picker = 1
 g.nvim_tree_respect_buf_cwd = 1
-g.nvim_tree_width_allow_resize  = 1
+g.nvim_tree_width_allow_resize = 1
 g.nvim_tree_show_icons = {
-  git = 1,
-  folders = 1,
-  files = 1
+   git = 1,
+   folders = 1,
+   files = 1,
 }
 
 g.nvim_tree_icons = {
-	default = "‣ "
+   default = "‣ ",
 }
 
-require('nvim-tree').setup {
-  open_on_setup = true,
-  view = {
-    width = 32,
-    auto_resize = true
-  },
-  filters = {
-    dotfiles = true,
-    custom = { '.git', 'node_modules', '.cache', '.bin' },
-  },
+require("nvim-tree").setup {
+   open_on_setup = true,
+   view = {
+      width = 32,
+      auto_resize = true,
+   },
+   filters = {
+      dotfiles = true,
+      custom = { ".git", "node_modules", ".cache", ".bin" },
+   },
 }
