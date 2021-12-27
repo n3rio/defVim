@@ -92,24 +92,24 @@ return packer.startup(function()
       requires = { { "nvim-lua/plenary.nvim" } },
    }
 
-  use {
+   use {
       "nvim-neorg/neorg",
       config = function()
-          require('neorg').setup {
-              -- Tell Neorg what modules to load
-              load = {
-                  ["core.defaults"] = {}, -- Load all the default modules
-                  ["core.norg.concealer"] = {}, -- Allows for use of icons
-                  ["core.norg.dirman"] = { -- Manage your directories with Neorg
-                      config = {
-                          workspaces = {
-                              my_workspace = "~/home/n3rio/work/worknotes/"
-                          }
-                      }
-                  }
-              },
-          }
+         require("neorg").setup {
+            -- Tell Neorg what modules to load
+            load = {
+               ["core.defaults"] = {}, -- Load all the default modules
+               ["core.norg.concealer"] = {}, -- Allows for use of icons
+               ["core.norg.dirman"] = { -- Manage your directories with Neorg
+                  config = {
+                     workspaces = {
+                        my_workspace = "~/home/n3rio/work/worknotes/",
+                     },
+                  },
+               },
+            },
+         }
       end,
-      requires = "nvim-lua/plenary.nvim"
-  }
+      requires = "nvim-lua/plenary.nvim",
+   }
 end)
