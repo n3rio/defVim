@@ -107,9 +107,16 @@ return packer.startup(function()
                      },
                   },
                },
+               ["core.integrations.telescope"] = {}, -- Enable the telescope module
             },
          }
       end,
       requires = "nvim-lua/plenary.nvim",
+      requires = "nvim-neorg/neorg-telescope" -- Be sure to pull in the repo
    }
+   use {
+     'sindrets/diffview.nvim',
+     requires = 'nvim-lua/plenary.nvim'
+   }
+   -- use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
 end)
