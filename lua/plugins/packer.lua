@@ -119,4 +119,5 @@ return packer.startup(function()
      requires = 'nvim-lua/plenary.nvim'
    }
    -- use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
+   use {'f-person/git-blame.nvim'}
 end)
